@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0038b8"/>
+      <stop offset="100%" stop-color="#001a5e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#grad)"/>
+  <!-- Ballot Box & Star of David motif -->
+  <path d="M12 28 L32 16 L52 28 L52 50 L12 50 Z" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="20" y="34" width="24" height="4" rx="2" fill="#38bdf8"/>
+  <path d="M32 20 L37 29 L27 29 Z" fill="#ffffff" opacity="0.9"/>
+  <path d="M32 32 L27 23 L37 23 Z" fill="#ffffff" opacity="0.9"/>
+  <circle cx="48" cy="18" r="4" fill="#10b981"/>
+</svg>

@@ -1,0 +1,15 @@
+{
+  "name": "בחירות 2026 - דסק הסקרים והפרשנות החיה",
+  "short_name": "סקרים 2026",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0038b8",
+  "background_color": "#0b132b",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

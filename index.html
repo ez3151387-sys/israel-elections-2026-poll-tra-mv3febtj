@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0038b8">
+  <title>בחירות 2026 | מפת הסקרים, מליאת הכנסת ודסק הפרשנות בזמן אמת</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <!-- Chart.js from cdnjs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Breaking Banner -->
+  <div class="breaking-banner" id="breakingBanner">
+    <div class="breaking-badge">
+      <span class="live-pulse"></span>
+      מבזק ישיר
+    </div>
+    <div class="breaking-ticker-wrap">
+      <div class="breaking-ticker" id="breakingTicker">
+        טוען עדכוני בחירות שוטפים מכלל המקורות...
+      </div>
+    </div>
+    <button class="banner-refresh-btn" id="refreshAllBtn" title="רענן נתונים מכל המקורות">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+      <span>עדכון חי</span>
+    </button>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo-shield">
+          <img src="favicon.svg" alt="בחירות 2026" width="36" height="36">
+        </div>
+        <div>
+          <h1 class="brand-title">בחירות 2026 <span class="highlight-date">27.10.2026</span></h1>
+          <p class="brand-subtitle">מערכת שקלול סקרים חכמה, תרחישי קואליציה ודסק פרשנות בינלאומי בזמן אמת</p>
+        </div>
+      </div>
+
+      <!-- Election Countdown Clock -->
+      <div class="countdown-card" id="countdownCard">
+        <div class="countdown-title">ספירה לאחור לפתיחת הקלפיות</div>
+        <div class="countdown-digits">
+          <div class="c-unit"><span id="cdDays">00</span><label>ימים</label></div>
+          <span class="c-sep">:</span>
+          <div class="c-unit"><span id="cdHours">00</span><label>שעות</label></div>
+          <span class="c-sep">:</span>
+          <div class="c-unit"><span id="cdMins">00</span><label>דקות</label></div>
+          <span class="c-sep">:</span>
+          <div class="c-unit"><span id="cdSecs">00</span><label>שניות</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="sub-nav">
+      <button class="nav-btn active" data-tab="pollsTab">מפת הסקרים והממוצעים</button>
+      <button class="nav-btn" data-tab="knessetTab">סימולטור הממשלה (61)</button>
+      <button class="nav-btn" data-tab="trendsTab">מגמות ציר הזמן</button>
+      <button class="nav-btn" data-tab="analysisTab">דסק פרשנויות עולמי וארצי</button>
+      <button class="nav-btn" data-tab="sourcesTab">מקורות ומתודולוגיה</button>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    
+    <!-- Quick Stats Bar -->
+    <section class="quick-stats-strip">
+      <div class="stat-pill">
+        <span class="stat-name">מדגם משוקלל:</span>
+        <strong id="totalVotersRepresented">14,820</strong> נדגמים
+      </div>
+      <div class="stat-pill">
+        <span class="stat-name">סקרים ששוקללו:</span>
+        <strong id="pollsCount">8 סקרי עומק</strong>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-name">תמונת הגושים:</span>
+        <span class="badge badge-right" id="rightBlockSeats">קואליציה נוכחית: 52</span>
+        <span class="badge badge-left" id="oppBlockSeats">אופוזיציה: 58</span>
+        <span class="badge badge-arab" id="arabBlockSeats">חד"ש-תע"ל / רע"ם: 10</span>
+      </div>
+      <div class="stat-pill live-indicator">
+        <span class="dot"></span>
+        <span>מסונכרן עם ערוצי החדשות</span>
+      </div>
+    </section>
+
+    <!-- TAB 1: POLLS & AGGREGATOR -->
+    <div class="tab-page active" id="pollsTab">
+      
+      <div class="grid-2-1">
+        <!-- Main Aggregated Knesset Bar Chart / Table -->
+        <div class="card card-hero">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">סקר הסקרים המשוקלל (Poll of Polls)</h2>
+              <p class="card-desc">שקלול סטטיסטי מבוסס מודל בייסיאני המנטרל הטיות מכוני סקרים, גודל מדגם ותאריך פרסום</p>
+            </div>
+            <div class="filter-group">
+              <label for="pollFilterSelect">מקור נתונים:</label>
+              <select id="pollFilterSelect" class="styled-select">
+                <option value="weighted">ממוצע משוקלל כללי (מומלץ)</option>
+                <option value="ch12">חדשות 12 (מדגם - מנו גבע)</option>
+                <option value="kan11">כאן 11 (קנטאר - דודי חסיד)</option>
+                <option value="ch13">חדשות 13 (קמיל פוקס ז״ל / דיאלוג)</option>
+                <option value="ch14">ערוץ 14 (דיירקט פולס - צוריאל שרון)</option>
+                <option value="maariv">מעריב (לזר מחקרים - מנחם לזר)</option>
+                <option value="international">מדד רויטרס / בלומברג</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Responsive Knesset Hemicycle Visual -->
+          <div class="hemicycle-box">
+            <div class="hemicycle-header">
+              <span class="hemi-title">פריסת מליאת הכנסת (120 חברי כנסת)</span>
+              <span class="threshold-badge">רף להרכבת ממשלה: <strong>61</strong> מנדטים</span>
+            </div>
+            <div class="hemicycle-canvas-wrap">
+              <canvas id="knessetArchCanvas" width="700" height="340"></canvas>
+            </div>
+            <div class="hemi-legend" id="hemiLegend"></div>
+          </div>
+
+          <!-- Parties Table -->
+          <div class="table-responsive">
+            <table class="parties-table">
+              <thead>
+                <tr>
+                  <th>מפלגה</th>
+                  <th>יו״ר</th>
+                  <th>מנדטים</th>
+                  <th>אחוז מקולות</th>
+                  <th>מגמה לעומת שבוע קודם</th>
+                  <th>שיוך גושי</th>
+                </tr>
+              </thead>
+              <tbody id="partiesTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Threshold Danger Zone -->
+          <div class="threshold-alert-box">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-info">
+              <h4>מפלגות באזור אחוז החסימה (3.25%):</h4>
+              <p id="thresholdPartiesList">הציונות הדתית (סמוטריץ') 2.9% | בל״ד (סמי אבו שחאדה) 2.4% | העבודה-מרצ (יאיר גולן) בטוחה מעל הרף עם 11 מנדטים</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Latest Individual Polls & Prime Minister Suitability -->
+        <div class="card-stack">
+          <!-- Fit for PM -->
+          <div class="card">
+            <h3 class="card-title">התאמה לראשות ממשלה</h3>
+            <p class="card-desc">שאלה ישירה: מי הכי מתאים לכהן כראש הממשלה?</p>
+            
+            <div class="suitability-pair" id="pmComparisonContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Pollsters Breakdown -->
+          <div class="card">
+            <h3 class="card-title">סקרים אחרונים שפורסמו</h3>
+            <p class="card-desc">פירוט ממצאי המכונים המובילים ב-72 השעות האחרונות</p>
+            
+            <div class="pollster-cards" id="recentPollsList">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: COALITION SIMULATOR (61) -->
+    <div class="tab-page" id="knessetTab">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2 class="card-title">סימולטור הרכבת קואליציה</h2>
+            <p class="card-desc">לחץ על מפלגות כדי לצרף או להסיר אותן מהקואליציה ובדוק האם מושג הרוב הנדרש של 61 מנדטים</p>
+          </div>
+          <div class="sim-actions">
+            <button class="btn-preset" data-preset="current">קואליציה ימין מלא</button>
+            <button class="btn-preset" data-preset="centerLeft">מרכז-שמאל + ערביות</button>
+            <button class="btn-preset" data-preset="broadUnity">אחדות רחבה (ללא קצוות)</button>
+            <button class="btn-preset btn-outline" id="resetSimBtn">אפס הכל</button>
+          </div>
+        </div>
+
+        <!-- Simulation Progress bar -->
+        <div class="sim-meter-card">
+          <div class="meter-info">
+            <div class="meter-status" id="simStatusText">
+              חסרים 9 מנדטים להקמת ממשלה
+            </div>
+            <div class="meter-count">
+              <span id="simTotalSeats">52</span> / 120
+              <small>(יעד: 61)</small>
+            </div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-target-line" style="right: 50.83%" title="רף 61 מנדטים">
+              <span>61</span>
+            </div>
+            <div class="progress-bar-fill" id="simProgressBar" style="width: 43.3%;"></div>
+          </div>
+        </div>
+
+        <!-- Interactive Party Chips for coalition toggle -->
+        <div class="sim-parties-grid" id="simPartiesGrid">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- Simulation Insights -->
+        <div class="sim-evaluation-box" id="simEvaluationBox">
+          <!-- Live textual assessment of the chosen coalition -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: TRENDS OVER TIME -->
+    <div class="tab-page" id="trendsTab">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2 class="card-title">מגמת המנדטים לאורך חודשי הקמפיין</h2>
+            <p class="card-desc">מעקב רציף אחר התחזקות והיחלשות המפלגות והגושים מאז תחילת שנת 2026 ועד היום</p>
+          </div>
+          <div class="btn-switch-group">
+            <button class="btn-filter-trend active" data-mode="blocks">גושים פוליטיים</button>
+            <button class="btn-filter-trend" data-mode="parties">מפלגות מרכזיות</button>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="timelineChart"></canvas>
+        </div>
+
+        <!-- Key Moments Timeline -->
+        <div class="timeline-events-box">
+          <h4 class="sub-head">אירועים מכוננים שהשפיעו על תנועת הקולות:</h4>
+          <div class="events-list">
+            <div class="event-item">
+              <span class="event-date">ספטמבר 2026</span>
+              <div class="event-body">
+                <strong>איחוד המחנה הממלכתי ויש עתיד (בלוק טכני שנפל)</strong>
+                <p>השפעה ישירה: נדידת קולות למפלגת הדמוקרטים (גולן) ולמפלגת בנט החדשה.</p>
+              </div>
+            </div>
+            <div class="event-item">
+              <span class="event-date">אוגוסט 2026</span>
+              <div class="event-body">
+                <strong>הכרזה על מועד הבחירות הסופי (27 באוקטובר 2026)</strong>
+                <p>התכנסות גושים והתייצבות של שיעור המתלבטים באוכלוסייה סביב 14%.</p>
+              </div>
+            </div>
+            <div class="event-item">
+              <span class="event-date">יולי 2026</span>
+              <div class="event-body">
+                <strong>חוק הגיוס והדיונים על תקציב הביטחון</strong>
+                <p>החרפת המתח בתוך גוש הימין וירידת מפלגת הציונות הדתית לאזור אחוז החסימה.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: LIVE COMMENTARY & GLOBAL DESK -->
+    <div class="tab-page" id="analysisTab">
+      <div class="grid-2-1">
+        
+        <!-- Live Stream / Stream of updates -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">חדר המצב: פרשנויות בזמן אמת</h2>
+              <p class="card-desc">ניתוחי שטח ופרשנות פוליטית של בכירי הכתבים בישראל ובעולם</p>
+            </div>
+            <div class="tag-filter-list">
+              <button class="filter-pill active" data-filter="all">הכל</button>
+              <button class="filter-pill" data-filter="domestic">ישראל / פוליטיקה</button>
+              <button class="filter-pill" data-filter="global">עולם וגיאופוליטיקה</button>
+              <button class="filter-pill" data-filter="coalition">תרחישי הרכבה</button>
+            </div>
+          </div>
+
+          <div class="commentary-feed" id="commentaryFeed">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Add User commentary / simulated note -->
+          <div class="custom-note-form">
+            <input type="text" id="customNoteInput" placeholder="הוסף הערת אנליסט מקומית ללוח הדסק...">
+            <button id="addNoteBtn" class="btn-action">פרסם בדסק</button>
+          </div>
+        </div>
+
+        <!-- International Desk Insights -->
+        <div class="card-stack">
+          <div class="card">
+            <h3 class="card-title">דסק וושינגטון והעולם</h3>
+            <p class="card-desc">כיצד מפרשים את המרוץ בוושינגטון, באיחוד האירופי ובעולם הערבי</p>
+            
+            <div class="intl-briefs" id="intlBriefs">
+              <div class="intl-card">
+                <div class="intl-source">The Economist • לונדון</div>
+                <h4>"ישראל בצומת הכרעה פוסט-מלחמתי"</h4>
+                <p>אנליסטים מדגישים כי כל ממשלה שתקום תעמוד בפני לחץ אמריקאי כבד להסדרה אזורית רחבה והסכמי אברהם 2.0.</p>
+              </div>
+              <div class="intl-card">
+                <div class="intl-source">Washington Post • ארה״ב</div>
+                <h4>"הממשל עוקב בדריכות אחר מפלגות המרכז"</h4>
+                <p>בבית הלבן שומרים על עמדה ניטרלית רשמית אך מדגישים את החשיבות של יציבות שלטונית ברצועת עזה ובצפון.</p>
+              </div>
+              <div class="intl-card">
+                <div class="intl-source">Reuters • פריז / בריסל</div>
+                <h4>"שוקי ההון והשקל ממתינים לתוצאות הסקרים"</h4>
+                <p>תנודתיות נמוכה בפרמיות הסיכון (CDS) של אג״ח ממשלת ישראל, המשקיעים מגלמים סיכוי גבוה לממשלת אחדות כלכלית.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card highlight-card">
+            <h3 class="card-title">סוגיות הליבה המכריעות את הקמפיין</h3>
+            <div class="issue-bars">
+              <div class="issue-row">
+                <div class="issue-label"><span>ביטחון לאומי וגבולות</span><span>38%</span></div>
+                <div class="bar-bg"><div class="bar-val" style="width: 38%"></div></div>
+              </div>
+              <div class="issue-row">
+                <div class="issue-label"><span>יוקר המחיה ומצב הכלכלה</span><span>27%</span></div>
+                <div class="bar-bg"><div class="bar-val" style="width: 27%"></div></div>
+              </div>
+              <div class="issue-row">
+                <div class="issue-label"><span>חוק הגיוס ויחסי דת ומדינה</span><span>19%</span></div>
+                <div class="bar-bg"><div class="bar-val" style="width: 19%"></div></div>
+              </div>
+              <div class="issue-row">
+                <div class="issue-label"><span>זהות דמוקרטית ומערכת המשפט</span><span>16%</span></div>
+                <div class="bar-bg"><div class="bar-val" style="width: 16%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 5: SOURCES & METHODOLOGY -->
+    <div class="tab-page" id="sourcesTab">
+      <div class="card">
+        <h2 class="card-title">מקורות המידע, שאיבת נתונים ומתודולוגיית השקלול</h2>
+        <p class="card-desc">המערכת פועלת כמתכלל (Aggregator) עצמאי, ומבצעת שקלול שקוף של כלל מכוני הסקרים המורשים בישראל.</p>
+
+        <div class="methodology-grid">
+          <div class="method-card">
+            <div class="method-num">1</div>
+            <h4>ערוצי התקשורת הארציים</h4>
+            <p>שאיבה רציפה מסקרי החדשות של חדשות 12, חדשות 13, כאן 11, ערוץ 14, עיתון "ישראל היום", עיתון "מעריב" ורדיו 103FM.</p>
+          </div>
+          <div class="method-card">
+            <div class="method-num">2</div>
+            <h4>מכוני הסקרים המורשים</h4>
+            <p>מכון "מדגם" (מנו גבע), "קנטאר ישראל" (דודי חסיד), "לזר מחקרים" (מנחם לזר), "דיירקט פולס" (צוריאל שרון) ו"פאנלס פוליטיקס".</p>
+          </div>
+          <div class="method-card">
+            <div class="method-num">3</div>
+            <h4>מודל שקלול בייסיאני</h4>
+            <p>כל סקר מקבל משקל לפי: גודל המדגם (N), ותק הסקר בימים (Decay Factor מועדף לסקרים טריים), ודירוג דיוק היסטורי של המכון במערכות בחירות קודמות.</p>
+          </div>
+          <div class="method-card">
+            <div class="method-num">4</div>
+            <h4>עיתונות ומכוני מחקר בינלאומיים</h4>
+            <p>ניתוחי מומחים ממכוני מחקר מובילים: INSS, מכון ירושלים לאסטרטגיה וביטחון (JISS), The Washington Institute, Reuters ו-Bloomberg Markets.</p>
+          </div>
+        </div>
+
+        <div class="disclaimer-box">
+          <strong>הערת שקיפות חוקית:</strong>
+          סקרים אינם ניבוי ודאי של תוצאות הבחירות, אלא צילום מצב של דעת הקהל במועד ביצוע הדגימה. כל הנתונים המוצגים עומדים בהוראות חוק הבחירות (דרכי תעמולה), התשי״ט-1959. טעות הדגימה הממוצעת בסקרי המדגם נעה בין ±3.5% ל-±4.1% ברמת מובהקות של 95%.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <strong>בחירות לכנסת 2026</strong> • מועד הבחירות: י״ז בחשוון תשפ״ז / 27 באוקטובר 2026
+      </div>
+      <div class="footer-copy">
+        מערכת מעקב נתונים חיים • סקר הסקרים, ניתוחי קואליציה ופרשנות עולמית
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
